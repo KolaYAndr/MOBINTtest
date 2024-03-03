@@ -80,39 +80,44 @@ fun CardsScreen(
             )
         )
     }) { paddingValues ->
-        Log.d("data", companies.itemCount.toString())
-        if (companies.loadState.refresh is LoadState.Loading) {
-            ProgressWithText(paddingValues)
-        }
-        if (companies.loadState.refresh is LoadState.Error) {
-            NoData(paddingValues)
-        }
-        if (companies.loadState.refresh is LoadState.NotLoading) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.margin1))
-            ) {
-                item {
-                    Spacer(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                items(companies.itemCount) { index ->
-                    val company = companies[index]
-                    if (company != null) {
-                        CardItem(company = company)
-                    }
-                }
-                item {
-                    if (companies.loadState.append is LoadState.Loading) {
-                        ProgressWithText()
-                    } else {
+        Log.d("state", companies.loadState.toString())
+        when (companies.loadState.refresh) {
+            is LoadState.Loading -> {
+                ProgressWithText(paddingValues)
+            }
+
+            is LoadState.Error -> {
+                if (companies.itemCount > 0)
+                    NoData(paddingValues)
+            }
+
+            is LoadState.NotLoading -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.margin1))
+                ) {
+                    item {
                         Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                         )
+                    }
+                    items(companies.itemCount) { index ->
+                        val company = companies[index]
+                        if (company != null) {
+                            CardItem(company = company)
+                        }
+                    }
+                    item {
+                        if (companies.loadState.append is LoadState.Loading) {
+                            ProgressWithText()
+                        } else {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }

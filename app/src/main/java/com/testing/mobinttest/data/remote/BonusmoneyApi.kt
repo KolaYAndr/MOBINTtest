@@ -7,7 +7,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface BonusmoneyApi {
-    @POST("getAllCompaniesIdeal")
+    @POST("getAllCompaniesLong")
     suspend fun getAllCardsIdeal(@Header("TOKEN") token: String = "123", @Body requestBody: RequestBody) : Response
 
     @POST("getAllCompaniesLong")
