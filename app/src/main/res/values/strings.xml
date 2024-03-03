@@ -4,6 +4,8 @@
     <string name="detail">Подробнее</string>
     <string name="cashback">Кешбэк</string>
     <string name="level">Уровень</string>
+    <string name="refresh">Подгрузка компаний</string>
+    <string name="no_companies">Нет компаний</string>
 
     <plurals name="points">
         <item quantity="one">балл</item>

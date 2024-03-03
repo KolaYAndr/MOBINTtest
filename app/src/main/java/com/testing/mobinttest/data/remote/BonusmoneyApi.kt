@@ -10,8 +10,8 @@ interface BonusmoneyApi {
     @POST("getAllCompaniesIdeal")
     suspend fun getAllCardsIdeal(@Header("TOKEN") token: String = "123", @Body requestBody: RequestBody) : Response
 
-    @POST("getAllCompaniesNormal")
-    suspend fun getAllCardsNormal(@Header("TOKEN") token: String = "123", @Body requestBody: RequestBody) : Response
+    @POST("getAllCompaniesLong")
+    suspend fun getAllCardsLong(@Header("TOKEN") token: String = "123", @Body requestBody: RequestBody) : Response
 
     @POST("getAllCompaniesError")
     suspend fun getAllCardsError(@Header("TOKEN") token: String = "123", @Body requestBody: RequestBody) : Response

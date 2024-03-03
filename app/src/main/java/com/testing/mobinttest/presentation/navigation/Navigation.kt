@@ -12,7 +12,6 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun Navigation(cardsViewModel: CardsViewModel = getViewModel()) {
     val navController = rememberNavController()
-
     NavHost(navController = navController, startDestination = CARDS_SCREEN) {
         composable(CARDS_SCREEN) {
             val companies = cardsViewModel.companyPagingFlow.collectAsLazyPagingItems()

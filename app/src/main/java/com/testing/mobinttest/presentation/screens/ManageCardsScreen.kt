@@ -1,15 +1,16 @@
 package com.testing.mobinttest.presentation.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -64,33 +65,40 @@ import com.testing.mobinttest.presentation.theme.White
 fun CardsScreen(
     companies: LazyPagingItems<Company>
 ) {
-    Scaffold(containerColor = LightGrey,
-        modifier = Modifier
-            .fillMaxSize(),
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.manage_cards),
-                        fontFamily = FontFamily(Font(R.font.segoe)),
-                        fontSize = dimensionResource(
-                            id = R.dimen.text1
-                        ).value.sp
-                    )
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = White, titleContentColor = Blue
+    Scaffold(containerColor = LightGrey, modifier = Modifier.fillMaxSize(), topBar = {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.manage_cards),
+                    fontFamily = FontFamily(Font(R.font.segoe)),
+                    fontSize = dimensionResource(
+                        id = R.dimen.text1
+                    ).value.sp
                 )
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = White, titleContentColor = Blue
             )
-        }) { paddingValues ->
+        )
+    }) { paddingValues ->
+        Log.d("data", companies.itemCount.toString())
         if (companies.loadState.refresh is LoadState.Loading) {
-            CircularProgressIndicator()
-        } else {
+            ProgressWithText(paddingValues)
+        }
+        if (companies.loadState.refresh is LoadState.Error) {
+            NoData(paddingValues)
+        }
+        if (companies.loadState.refresh is LoadState.NotLoading) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues),
                 verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.margin1))
             ) {
+                item {
+                    Spacer(
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 items(companies.itemCount) { index ->
                     val company = companies[index]
                     if (company != null) {
@@ -98,11 +106,14 @@ fun CardsScreen(
                     }
                 }
                 item {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(dimensionResource(id = R.dimen.margin1))
-                    )
+                    if (companies.loadState.append is LoadState.Loading) {
+                        ProgressWithText()
+                    } else {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
                 }
             }
         }
@@ -117,8 +128,7 @@ private fun CardItem(company: Company) {
             .padding(
                 start = dimensionResource(id = R.dimen.margin1),
                 end = dimensionResource(id = R.dimen.margin1)
-            ),
-        colors = CardDefaults.cardColors(containerColor = White)
+            ), colors = CardDefaults.cardColors(containerColor = White)
     ) {
         Row(
             modifier = Modifier
@@ -300,8 +310,7 @@ private fun CardItem(company: Company) {
                         Toast.LENGTH_SHORT
                     ).show()
                 },
-                modifier = Modifier
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = LightGrey)
             ) {
@@ -310,5 +319,59 @@ private fun CardItem(company: Company) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun NoData(paddingValues: PaddingValues) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = stringResource(id = R.string.no_companies),
+            fontSize = dimensionResource(id = R.dimen.text2).value.sp,
+            color = Black
+        )
+    }
+}
+
+@Composable
+private fun ProgressWithText(paddingValues: PaddingValues) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = stringResource(id = R.string.refresh),
+            fontSize = dimensionResource(id = R.dimen.text2).value.sp,
+            color = Black
+        )
+        CircularProgressIndicator(color = Black)
+    }
+}
+
+@Composable
+private fun ProgressWithText() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = stringResource(id = R.string.refresh),
+            fontSize = dimensionResource(id = R.dimen.text2).value.sp,
+            color = Black
+        )
+        CircularProgressIndicator(color = Black)
     }
 }
