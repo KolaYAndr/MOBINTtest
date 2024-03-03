@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MOBINTtest</string>
+    <string name="manage_cards">Управление картами</string>
+    <string name="detail">Подробнее</string>
+    <string name="cashback">Кешбэк</string>
+    <string name="level">Уровень</string>
+
+    <plurals name="points">
+        <item quantity="one">балл</item>
+        <item quantity="few">балла</item>
+        <item quantity="many">баллов</item>
+        <item quantity="other">баллов</item>
+    </plurals>
+</resources>
